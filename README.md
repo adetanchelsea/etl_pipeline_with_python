@@ -19,7 +19,7 @@ This repository houses all the scripts used in extracting data from youtube, tra
 ---
 
 ## Overview
-This project implements an automated ETL (Extract, Transform, Load) pipeline for collecting and analyzing YouTube channel data related to “data analysis.” The pipeline extracts channel and video metadata using the YouTube Data API, cleans and transforms the data—such as standardizing country names and removing special characters from descriptions—and loads it into a Snowflake database for storage and further analysis.
+This project implements an automated ETL (Extract, Transform, Load) pipeline for collecting and analyzing YouTube channel data related to “data analysis.” The pipeline extracts channel and video metadata using the YouTube Data API, cleans and transforms the data, such as standardizing country names and removing special characters from descriptions, and loads it into a Snowflake database for storage and further analysis.
 
 ## Features
 - Extracts YouTube channel and video data using the YouTube Data API.
@@ -64,10 +64,10 @@ Before running the project, make sure you have the following:
    ```
 ### Environment Variables
 Create a `.env` file and add the following:
+
     ```
     # YouTube API key
     YOUTUBE_API_KEY=your_youtube_api_key_here
-
     # Snowflake credentials
     SNOWFLAKE_USER=your_username
     SNOWFLAKE_PASSWORD=your_password
