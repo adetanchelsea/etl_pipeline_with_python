@@ -23,7 +23,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # Insert your API Key here
-API_KEY = "AIzaSyCb2NDl0rLI531BOKv59_Nd2-YeyDpPAyQ"
+API_KEY = "YOUR API_KEY HERE"
 
 #---------------------------------------------------------------------------------------
 # HELPER FUNCTIONS
