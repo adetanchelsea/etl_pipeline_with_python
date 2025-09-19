@@ -65,9 +65,10 @@ Before running the project, make sure you have the following:
 ### Environment Variables
 Create a `.env` file and add the following:
 
-    ```
+    ```bash
     # YouTube API key
     YOUTUBE_API_KEY=your_youtube_api_key_here
+
     # Snowflake credentials
     SNOWFLAKE_USER=your_username
     SNOWFLAKE_PASSWORD=your_password
@@ -75,6 +76,7 @@ Create a `.env` file and add the following:
     SNOWFLAKE_WAREHOUSE=your_warehouse
     SNOWFLAKE_DATABASE=your_database
     SNOWFLAKE_SCHEMA=your_schema
+
     ```
 
 ## How It Works
@@ -88,7 +90,8 @@ Create a `.env` file and add the following:
 - Activate your virtual environment (if not already active).
 - Ensure your .env file contains your YouTube API key and Snowflake credentials.
 - Run the ETL scripts individually or in sequence:
-    ```
+
+    ```bash
     # Extract data from YouTube
     scripts/extract.py
 
@@ -97,6 +100,7 @@ Create a `.env` file and add the following:
 
     # Load transformed data into Snowflake
     scripts/load.py
+    
     ```
 - Verify the Snowflake database to confirm that the data has been loaded correctly.
 
