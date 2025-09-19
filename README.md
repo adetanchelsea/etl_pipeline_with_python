@@ -66,6 +66,7 @@ Before running the project, make sure you have the following:
 Create a `.env` file and add the following:
 
     ```bash
+    
     # YouTube API key
     YOUTUBE_API_KEY=your_youtube_api_key_here
 
