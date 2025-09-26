@@ -1,6 +1,6 @@
 # Building a Youtube Data ETL Pipeline with Python
 
-This repository houses all the scripts used in extracting data from youtube, transforming it and then loading it into a Snowflake Warehouse. 
+This repository houses all the scripts used in extracting data from youtube, transforming it and then loading it into a Snowflake Data Warehouse. 
 
 ## Table of Contents
 - [Overview](#overview)
