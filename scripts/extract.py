@@ -15,20 +15,25 @@ The output of this script is a CSV file with the extracted youtube data.
 
 # Importing the neccesary libraries
 import time
+import os
 from collections import Counter
 from typing import List, Dict, Any
+from dotenv import load_dotenv
 
 import pandas as pd
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+# Loading variables from .env file
+load_dotenv()
+
 # Insert your API Key here
-API_KEY = "YOUR API_KEY HERE"
+API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 #---------------------------------------------------------------------------------------
 # HELPER FUNCTIONS
 #---------------------------------------------------------------------------------------
-def build_youtube_client(api_key):
+def build_youtube_client(api_key:str) -> Resource:
     """
     Create a YouTube API client.
 
@@ -36,11 +41,11 @@ def build_youtube_client(api_key):
     api_key (str): YouTube Data API key.
 
     Returns:
-    YouTube API client object.
+    Resource: YouTube API client object.
     """
     return build("youtube", "v3", developerKey=api_key)
 
-def safe_int(x):
+def safe_int(x: Any) -> int:
     """
     Convert a string or number to int safely.
 
@@ -48,14 +53,14 @@ def safe_int(x):
     x (Any): Input value.
 
     Returns:
-    Integer value if conversion succeeds, otherwise None.
+    int: Integer value if conversion succeeds, otherwise None.
     """
     try:
         return int(x)
     except Exception:
         return None
     
-def paginated_search_channels(youtube, query, max_channels: int = 200, search_type: str = "channel"):
+def paginated_search_channels(youtube, query, max_channels: int = 200, search_type: str = "channel") -> list:
     """
     Search YouTube for channels or videos matching a query and return channel IDs.
 
@@ -66,7 +71,7 @@ def paginated_search_channels(youtube, query, max_channels: int = 200, search_ty
     search_type(str): "channel" to search channels directly, "video" to search videos and extract their channel IDs.
 
     Returns:
-    List of channel IDs.
+    list: List of channel IDs.
     """
     found = []
     next_page = None
@@ -87,9 +92,9 @@ def paginated_search_channels(youtube, query, max_channels: int = 200, search_ty
             break
 
         for item in res.get("items", []):
-            ch_id = item.get("snippet", {}).get("channelId") or item.get("id", {}).get("channelId")
-            if ch_id:
-                found.append(ch_id)
+            channel_id = item.get("snippet", {}).get("channelId") or item.get("id", {}).get("channelId")
+            if channel_id:
+                found.append(channel_id)
 
         next_page = res.get("nextPageToken")
         if len(set(found)) >= max_channels or not next_page:
@@ -109,15 +114,15 @@ def gather_candidate_channels(youtube, queries, max_channels_per_query=100) -> C
     Returns:
     Channel IDs mapped to how many times they appeared.
     """
-    c = Counter()
+    counter = Counter()
     for q in queries:
         channel_hits = paginated_search_channels(youtube, q, max_channels=max_channels_per_query, search_type="channel")
-        c.update(channel_hits)
+        counter.update(channel_hits)
 
         video_hits = paginated_search_channels(youtube, q, max_channels=max_channels_per_query, search_type="video")
-        c.update(video_hits)
+        counter.update(video_hits)
 
-    return c
+    return counter
 
 def get_channel_stats(youtube, channel_ids: List[str]) -> List[Dict[str, Any]]:
     """
@@ -166,7 +171,9 @@ def get_channel_stats(youtube, channel_ids: List[str]) -> List[Dict[str, Any]]:
 #-------------------------------------------------------------------------------------------------
 # MAIN FUNCTION
 #-------------------------------------------------------------------------------------------------
-def main_extract(api_key=API_KEY, target_channels=200, output_csv="extracted_youtube_data.csv"):
+filepath = "path_to_save_your_file"
+
+def main_extract(api_key=API_KEY, target_channels=200, output_csv=filepath) -> pd.DataFrame:
     """
     Main extraction pipeline.
 
@@ -186,17 +193,8 @@ def main_extract(api_key=API_KEY, target_channels=200, output_csv="extracted_you
     """
     youtube = build_youtube_client(api_key)
 
-    queries = [
-        "data analysis tutorial",
-        "python pandas tutorial",
-        "excel for data analysis",
-        "sql for data analysis",
-        "power bi tutorial",
-        "tableau tutorial",
-        "data analyst tutorial",
-        "data analysis project",
-        "learn data analysis",
-    ]
+    queries_raw = os.getenv("QUERIES", "")
+    queries = [q.strip() for q in queries_raw.split(",") if q.strip()]
 
     print("Collecting candidate channels by running searches...")
     channel_counter = gather_candidate_channels(youtube, queries, max_channels_per_query=200)
