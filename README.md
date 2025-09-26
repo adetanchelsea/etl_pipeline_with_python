@@ -28,7 +28,7 @@ This project implements an automated ETL (Extract, Transform, Load) pipeline for
 - Modular and configurable pipeline using environment variables for easy replication.
 
 ## Architecture
-![Architecture Diagram](/img/architecture.png)
+![Architecture Diagram](/img/etlarchitecture.svg)
 
 ## Technologies Used
 - **Python** – Main programming language for the ETL pipeline
