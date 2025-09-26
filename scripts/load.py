@@ -7,6 +7,8 @@ for further analysis and reporting.
 """
 
 # Importing the neccesary libraries
+import os
+from dotenv import load_dotenv
 import pandas as pd
 import snowflake.connector
 from snowflake.connector.pandas_tools import write_pandas
@@ -14,19 +16,6 @@ from snowflake.connector.pandas_tools import write_pandas
 #-------------------------------------------------------------------------------------------------
 # HELPER FUNCTIONS
 #-------------------------------------------------------------------------------------------------
-def load_csv(csv_path):
-    """
-    Load a CSV file into a pandas DataFrame.
-
-    Parameters:
-    csv_path (str): Path to the CSV file.
-
-    Returns:
-    DataFrame containing CSV data.
-    """
-
-    return pd.read_csv(csv_path)
-
 def connect_snowflake(user, password, account, warehouse, database, schema):
     """
     Establish a connection to a Snowflake warehouse.
@@ -73,19 +62,19 @@ def main_loading_script():
     """Main function to execute CSV loading into Snowflake."""
 
     # CSV path
-    csv_file_path = "data/cleaned_youtube_data.csv"
+    csv_file_path = "path_to_cleandata"
 
     # Snowflake credentials
-    user = 'USERNAME'
-    password = 'PASSWORD'
-    account = 'ACCOUNT_NAME'
-    warehouse = 'MY_WAREHOUSE'
-    database = 'MY_DB'
-    schema = 'MY_SCHEMA'
-    table_name = 'MY_TABLE'
+    user = os.getenv("SNOWFLAKE_USER")
+    password = os.getenv("SNOWFLAKE_PASSWORD")
+    account = os.getenv("SNOWFLAKE_ACCOUNT")
+    warehouse = os.getenv("SNOWFLAKE_WAREHOUSE")
+    database = os.getenv("SNOWFLAKE_DATABASE")
+    schema = os.getenv("SNOWFLAKE_SCHEMA")
+    table_name =  os.getenv("SNOWFLAKE_TABLE") 
 
     # Load CSV
-    df = load_csv(csv_file_path)
+    df = pd.read_csv(csv_file_path)
 
     df.columns = [col.upper() for col in df.columns]
 
