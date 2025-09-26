@@ -12,18 +12,6 @@ import pycountry
 #-----------------------------------------------------------------------------------------------------------------
 #HELPER FUNCTIONS
 #-----------------------------------------------------------------------------------------------------------------
-def load_data(path):
-    """
-    Load raw data from a CSV file into a pandas DataFrame.
-    
-    Parameters:
-    path (str): Path to the CSV file.
-    
-    Returns:
-    Raw dataset loaded into a Pandas DataFrame.
-    """
-    return pd.read_csv(path)
-
 def standardize_column_names(df):
     """
     Standardize column names by making them lowercase, stripping extra spaces, and replacing spaces with underscores.
@@ -141,19 +129,6 @@ def rename_columns(df):
     """
     return df.rename(columns={"uploads_playlist_id": "playlist_id"})
 
-def save_data(df, path):
-    """
-    Save the cleaned DataFrame to a CSV file.
-    
-    Parameters:
-    df (pd.DataFrame): The cleaned dataset.
-    path (str): Path to save the CSV file.
-    
-    Returns:
-    Returns a cleaned csv file.
-    """
-    df.to_csv(path, index=False)
-
 #--------------------------------------------------------------------------------------------------
 # MAIN FUNCTION
 #--------------------------------------------------------------------------------------------------
@@ -169,7 +144,7 @@ def transform_youtube_data(input_path, output_path):
     None
     """
 
-    df = load_data(input_path)
+    df = pd.read_csv(input_path)
     df = standardize_column_names(df)
     df = drop_duplicates(df)
     df = handle_missing_values(df)
@@ -177,11 +152,12 @@ def transform_youtube_data(input_path, output_path):
     df = map_country_names(df)
     df = clean_text_fields(df)
     df = rename_columns(df)
-    save_data(df, output_path)
+    df.to_csv(output_path)
 
 if __name__ == "__main__":
-    input_file = "data/extracted_youtube_data.csv"
-    output_file = "data/cleaned_youtube_data.csv"
+    input_file = "path_to_extracted_data"
+    output_file = "path_to_cleaned_data"
+    
     transform_youtube_data(input_file, output_file)
     print(f"Data transformed successfully! Saved to {output_file}")
 
