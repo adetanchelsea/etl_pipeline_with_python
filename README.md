@@ -63,7 +63,7 @@ Before running the project, make sure you have the following:
    pip install -r requirements.txt
    ```
 ### Environment Variables
-Create a `.env` file and add the following:
+Create an `.env` file and add the following:
 
     ```bash
     
@@ -78,6 +78,9 @@ Create a `.env` file and add the following:
     SNOWFLAKE_DATABASE=your_database
     SNOWFLAKE_SCHEMA=your_schema
 
+    #QUERY SEARCH PHRASES
+    QUERY="query_list"
+
     ```
 
 ## How It Works
@@ -89,7 +92,7 @@ Create a `.env` file and add the following:
 
 ## Usage
 - Activate your virtual environment (if not already active).
-- Ensure your .env file contains your YouTube API key and Snowflake credentials.
+- Ensure your .env file contains your YouTube API key, Snowflake credentials and query search phrases.
 - Run the ETL scripts individually or in sequence:
 
     ```bash
