@@ -8,6 +8,13 @@ This script transforms raw extracted YouTube channel data into a clean, analysis
 import pandas as pd
 import re
 import pycountry
+import logging
+
+# Configuring the logging library
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s: %(message)s"
+)
 
 #-----------------------------------------------------------------------------------------------------------------
 #HELPER FUNCTIONS
@@ -159,7 +166,7 @@ if __name__ == "__main__":
     output_file = "path_to_cleaned_data"
     
     transform_youtube_data(input_file, output_file)
-    print(f"Data transformed successfully! Saved to {output_file}")
+    logging.info(f"Data transformed successfully! Saved to {output_file}")
 
 
 
