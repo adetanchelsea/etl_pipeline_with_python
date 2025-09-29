@@ -21,8 +21,15 @@ from typing import List, Dict, Any
 from dotenv import load_dotenv
 
 import pandas as pd
+import logging
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+
+# Configuring the logging library
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s: %(message)s"
+)
 
 # Loading variables from .env file
 load_dotenv()
@@ -87,8 +94,7 @@ def paginated_search_channels(youtube, query, max_channels: int = 200, search_ty
             )
             res = req.execute()
         except HttpError as e:
-            print("HttpError during search:", e)
-            time.sleep(5)
+            logging.info("HttpError during search:", e)
             break
 
         for item in res.get("items", []):
@@ -147,7 +153,7 @@ def get_channel_stats(youtube, channel_ids: List[str]) -> List[Dict[str, Any]]:
                 maxResults=50
             ).execute()
         except HttpError as e:
-            print("HttpError fetching channel stats:", e)
+            logging.info("HttpError fetching channel stats:", e)
             time.sleep(5)
             continue
 
@@ -196,11 +202,11 @@ def main_extract(api_key=API_KEY, target_channels=200, output_csv=filepath) -> p
     queries_raw = os.getenv("QUERIES", "")
     queries = [q.strip() for q in queries_raw.split(",") if q.strip()]
 
-    print("Collecting candidate channels by running searches...")
+    logging.info("Collecting candidate channels by running searches...")
     channel_counter = gather_candidate_channels(youtube, queries, max_channels_per_query=200)
 
     unique_channels = [ch for ch, _ in channel_counter.most_common(target_channels)]
-    print(f"Found {len(unique_channels)} unique channel candidates; pulling stats...")
+    logging.info(f"Found {len(unique_channels)} unique channel candidates; pulling stats...")
 
     channel_records = get_channel_stats(youtube, unique_channels)
 
@@ -217,7 +223,7 @@ def main_extract(api_key=API_KEY, target_channels=200, output_csv=filepath) -> p
     df = df.reindex(columns=[c for c in cols if c in df.columns])
 
     df.to_csv(output_csv, index=False)
-    print(f"Saved {len(df)} channels to {output_csv}")
+    logging.info(f"Saved {len(df)} channels to {output_csv}")
     return df
 
 if __name__ == "__main__":
