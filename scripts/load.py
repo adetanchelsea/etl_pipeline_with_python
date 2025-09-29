@@ -12,6 +12,13 @@ from dotenv import load_dotenv
 import pandas as pd
 import snowflake.connector
 from snowflake.connector.pandas_tools import write_pandas
+import logging
+
+# Configuring the logging library
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s: %(message)s"
+)
 
 #-------------------------------------------------------------------------------------------------
 # HELPER FUNCTIONS
@@ -79,14 +86,11 @@ def main_loading_script():
     df.columns = [col.upper() for col in df.columns]
 
     # Connect to Snowflake
-    conn = connect_snowflake(user, password, account, warehouse, database, schema)
+    with connect_snowflake(user, password, account, warehouse, database, schema) as conn:
+        
+        rows_inserted = load_dataframe_to_snowflake(conn, df, table_name)
 
-    # Load data into Snowflake
-    rows_inserted = load_dataframe_to_snowflake(conn, df, table_name)
-    print(f"Rows inserted: {rows_inserted}")
-
-    # Close connection
-    conn.close()
+        logging.info(f"Rows inserted: {rows_inserted}")
 
 
 if __name__ == "__main__":
