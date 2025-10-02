@@ -162,8 +162,8 @@ def transform_youtube_data(input_path, output_path):
     df.to_csv(output_path)
 
 if __name__ == "__main__":
-    input_file = "path_to_extracted_data"
-    output_file = "path_to_cleaned_data"
+    input_file = "data/extracted_youtube_data"
+    output_file = "data/cleaned_youtube_data"
     
     transform_youtube_data(input_file, output_file)
     logging.info(f"Data transformed successfully! Saved to {output_file}")
