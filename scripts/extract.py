@@ -94,8 +94,8 @@ def paginated_search_channels(youtube, query, max_channels: int = 200, search_ty
             )
             res = req.execute()
         except HttpError as e:
-            logging.info("HttpError during search:", e)
-            break
+            logging.error("HttpError during search:", e)
+            raise
 
         for item in res.get("items", []):
             channel_id = item.get("snippet", {}).get("channelId") or item.get("id", {}).get("channelId")
@@ -153,7 +153,7 @@ def get_channel_stats(youtube, channel_ids: List[str]) -> List[Dict[str, Any]]:
                 maxResults=50
             ).execute()
         except HttpError as e:
-            logging.info("HttpError fetching channel stats:", e)
+            logging.error("HttpError fetching channel stats:", e)
             time.sleep(5)
             continue
 
